@@ -115,10 +115,11 @@ public class RegisterForDriver extends AppCompatActivity {
         String naMe=name.getText().toString();
         String mobile=phone.getText().toString();
         String eMail=email.getText().toString();
+        String key=eMail.substring(0,(eMail.length()-10));
+        key=key.replace(".","");
         String licenseNo=licence.getText().toString();
-        String id=databaseReference.push().getKey();
-        Drivers drivers=new Drivers(id,naMe,eMail,mobile,licenseNo);
-        databaseReference.child(id).setValue(drivers);
+        Drivers drivers=new Drivers(naMe,eMail,mobile,licenseNo);
+        databaseReference.child(key).setValue(drivers);
 
     }
 

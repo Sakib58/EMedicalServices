@@ -11,7 +11,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Switch;
 
+import com.example.ems.DriverAllActivity.EmailAndKey;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,6 +22,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,6 +35,10 @@ public class MapsActivityForDriver extends FragmentActivity implements OnMapRead
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     Marker marker;
     LocationListener locationListener;
+    Switch activityMode;
+    DatabaseReference databaseReference,databaseReference2;
+    String userEMain;
+    public static String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,12 @@ public class MapsActivityForDriver extends FragmentActivity implements OnMapRead
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        activityMode=findViewById(R.id.switch1);
+        databaseReference= FirebaseDatabase.getInstance().getReference("ActiveLocation");
+        userEMain=LoginForDriver.userMail;
+        key=userEMain.substring(0,(userEMain.length()-10));
+        key=key.replace(".","");
+        databaseReference2=FirebaseDatabase.getInstance().getReference("KeyAndMail");
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -52,6 +67,23 @@ public class MapsActivityForDriver extends FragmentActivity implements OnMapRead
             public void onLocationChanged(Location location) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
+                final LiveLocations liveLocations=new LiveLocations(latitude,longitude);
+                final EmailAndKey emailAndKey=new EmailAndKey(userEMain);
+
+                activityMode.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        boolean switchOn=activityMode.isChecked();
+                        if(switchOn){
+                            databaseReference2.child(key).setValue(emailAndKey);
+                            databaseReference.child(key).setValue(liveLocations);
+                        }
+                        else{
+                            databaseReference2.child(key).removeValue();
+                            databaseReference.child(key).removeValue();
+                        }
+                    }
+                });
                 //get the location name from latitude and longitude
                 Geocoder geocoder = new Geocoder(getApplicationContext());
                 try {

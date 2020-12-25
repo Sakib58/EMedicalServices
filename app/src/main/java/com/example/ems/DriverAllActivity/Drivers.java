@@ -6,15 +6,34 @@ public class Drivers {
     String dEmail;
     String dPhone;
     String dLicense;
-    Drivers(){
+    public Drivers(){
 
     }
 
-    public Drivers(String dId, String dName, String dEmail, String dPhone, String dLicense) {
-        this.dId = dId;
+    public Drivers(String dName, String dEmail, String dPhone, String dLicense) {
         this.dName = dName;
-        this.dEmail = dEmail;
+        this.dEmail=dEmail;
         this.dPhone = dPhone;
+        this.dLicense = dLicense;
+    }
+
+    public void setdId(String dId) {
+        this.dId = dId;
+    }
+
+    public void setdName(String dName) {
+        this.dName = dName;
+    }
+
+    public void setdEmail(String dEmail) {
+        this.dEmail = dEmail;
+    }
+
+    public void setdPhone(String dPhone) {
+        this.dPhone = dPhone;
+    }
+
+    public void setdLicense(String dLicense) {
         this.dLicense = dLicense;
     }
 
