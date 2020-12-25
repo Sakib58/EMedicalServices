@@ -21,6 +21,7 @@ public class LoginForDriver extends AppCompatActivity {
     TextView newDriver,login;
     EditText mail,pass;
     FirebaseAuth firebaseAuth;
+    public static String userMail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class LoginForDriver extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                userMail=mail.getText().toString();
                 firebaseAuth.signInWithEmailAndPassword(mail.getText().toString(),pass.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
